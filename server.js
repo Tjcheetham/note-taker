@@ -1,9 +1,11 @@
 //dependencies
+const fs = require("fs");
 const express = require("express");
+const uuid = require("uuid/v4");
+const dbPath = __dirname + "/db/db.json";
 const app = express();
 const PORT = process.env.PORT || 8080;
-const uuid = require("uuid/v4");
-const fs = require("fs");
+
 
 //middleware
 app.use(express.urlencoded({ extended: true }));
@@ -21,10 +23,16 @@ const notes = [
 //Routes
 //------------------------------------------------------
 
+// GET - /api/notes
+// Read from db.json
+// if err - send back status code 500
+// parse file into JS object || Array
+// Send back db contents
+
 //displays notes.html page
-app.get("/api/notes", function (req,res){
-    fs.readFile(__dirname + "/db/db.json", "utf8", function(err, notes){
-        if(err) {
+app.get("/api/notes", function (req, res) {
+    fs.readFile(dbPath, "utf8", function (err, notes) {
+        if (err) {
             return res.status(500).end();
         }
         const db = JSON.parse(notes);
@@ -32,30 +40,78 @@ app.get("/api/notes", function (req,res){
     })
 });
 
-//returns index.html page
-app.get("*", function(req, res){
-    res.redirect("/")
-});
+//---------------------------------------------
+
+// POST - /api/notes
+// Read from db.json
+// if err - send back status code 500
+// parse JSON
+// using req.body
+// create a new note with unique id
+// append to parsed JSON
+// Overwrite db.json with new array
+// send newly created note
 
 //creates new notes - takes in JSON format
-app.post("/api/notes", function(req, res) {
-    const note = { ...req.body, id: uuid() };
-    console.log(note);
-    //SHOULD I BE PUSHING TO DB.JSON FILE??
-    notes.push(note)
-    res.json(note);
+app.post("/api/notes", function (req, res) {
+    fs.readFile(dbPath, "utf8", function (err, notes) {
+        if (err) {
+            return res.status(500).end();
+        }
+        const db = JSON.parse(notes);
+        const note = { ...req.body, id: uuid() };
+        console.log(note);
+        db.push(note);
+        fs.writeFile(dbPath, JSON.stringify(db, null, 2), function (err) {
+            if (err) {
+                return res.status(500).end();
+            }
+            res.json(db);
+        })
+    })
 });
 
+// DELETE - /api/notes/:id
+// Read from db.json
+// if err - respond with status code 500
+// parse JSON
+// store id coming from params
+// filter out note using ID
+// Overwrite db.json
+// send message back to client
+
 //deletes notes
-app.delete("/api/notes/id", function(req, res) {
-    //HOW TO TARGET NOTE TO DELETE?
-    //DON'T THINK I'M CORRECTLY TARGETING WHERE I'M POSTING NOTES SO CAN'T FIND THEM TO DELETE
-    notes.splice(id);
-    res.json(note);
+app.delete("/api/notes/:id", function (req, res) {
+    fs.readFile(dbPath, "utf8", function (res, req) {
+        if (err) {
+            return res.status(500).end();
+        }
+        const db = parse.JSON(notes);
+        console.log(req.params.id);
+        // .filter()
+        notes.filter(function(id){
+            if(id ===!req.params.id) {
+                db.push(notes);
+            }
+        })
+    });
+    fs.writeFile(dbPath, JSON.stringify(db, null, 2), function (err) {
+        if (err) {
+            return res.status(500).end();
+        }
+        res.json(db);
+    });
+});
+
+//returns index.html page
+app.get("*", function (req, res) {
+    res.redirect("/")
 });
 
 //starts server listening
 app.listen(PORT, () => console.log(`App listening on POST: ${PORT}`));
 
-//BODY PARSER?
-//
+
+
+
+
