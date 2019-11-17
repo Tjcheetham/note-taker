@@ -89,17 +89,17 @@ app.delete("/api/notes/:id", function (req, res) {
         const db = parse.JSON(notes);
         console.log(req.params.id);
         // .filter()
-        notes.filter(function(id){
-            if(id ===!req.params.id) {
+        db.filter(function (id) {
+            if (id === !req.params.id) {
                 db.push(notes);
             }
         })
-    });
-    fs.writeFile(dbPath, JSON.stringify(db, null, 2), function (err) {
-        if (err) {
-            return res.status(500).end();
-        }
-        res.json(db);
+        fs.writeFile(dbPath, JSON.stringify(db, null, 2), function (err) {
+            if (err) {
+                return res.status(500).end();
+            }
+            res.json(db);
+        });
     });
 });
 
