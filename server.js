@@ -82,11 +82,11 @@ app.post("/api/notes", function (req, res) {
 
 //deletes notes
 app.delete("/api/notes/:id", function (req, res) {
-    fs.readFile(dbPath, "utf8", function (res, req) {
+    fs.readFile(dbPath, "utf8", function (err, notes) {
         if (err) {
             return res.status(500).end();
         }
-        const db = parse.JSON(notes);
+        const db = JSON.parse(notes);
         console.log(req.params.id);
         // .filter()
         db.filter(function (id) {
@@ -109,7 +109,7 @@ app.get("*", function (req, res) {
 });
 
 //starts server listening
-app.listen(PORT, () => console.log(`App listening on POST: ${PORT}`));
+app.listen(PORT, () => console.log(`App listening on PORT: ${PORT}`));
 
 
 
