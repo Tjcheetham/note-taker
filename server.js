@@ -89,12 +89,10 @@ app.delete("/api/notes/:id", function (req, res) {
         const db = JSON.parse(notes);
         console.log(req.params.id);
         // .filter()
-        db.filter(function (id) {
-            if (id === !req.params.id) {
-                db.push(notes);
-            }
+        let newNotes = db.filter(function (note) {
+            return note.id !== req.params.id
         })
-        fs.writeFile(dbPath, JSON.stringify(db, null, 2), function (err) {
+        fs.writeFile(dbPath, JSON.stringify(newNotes, null, 2), function (err) {
             if (err) {
                 return res.status(500).end();
             }
