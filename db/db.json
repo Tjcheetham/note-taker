@@ -1,7 +1,17 @@
 [
   {
-    "title": "jhgjhgjhg",
-    "text": "jhgjhgjgj",
-    "id": "ac03c172-5ff8-43d9-98bf-a7dfcdc11b05"
+    "title": "Reminder",
+    "text": "Don't forget to get groceries on the way home!",
+    "id": "7de4c6e8-ce4a-4842-ae68-907c98edcfbe"
+  },
+  {
+    "title": "Class Notes",
+    "text": "asdfas",
+    "id": "4e7d8a02-02ba-4ea4-a90b-d567a75ec187"
+  },
+  {
+    "title": "Grocery List",
+    "text": "Milk\nEggs\nHam\nBread\nCheese\nBacon\nTortillas",
+    "id": "2136879a-dae7-47a0-8ab7-99720572949f"
   }
 ]
